@@ -56,12 +56,10 @@ function App() {
   const calculateBalances = (): Balance[] => {
     const balances: { [key: string]: number } = {}
     
-    // Initialize balances for all participants
     participants.forEach(p => {
       balances[p.id] = 0
     })
 
-    // Calculate net balance for each participant
     expenses.forEach(expense => {
       const payer = expense.paidBy
       const amountPerPerson = expense.amount / expense.participants.length
@@ -76,7 +74,6 @@ function App() {
       })
     })
 
-    // Convert balances to transfer instructions
     const transfers: Balance[] = []
     const debtors = Object.entries(balances)
       .filter(([_, amount]) => amount < 0)
@@ -91,7 +88,7 @@ function App() {
 
       const amount = Math.min(Math.abs(debtorBalance), creditorBalance)
 
-      if (amount > 0.01) { // Only add transfers for non-zero amounts
+      if (amount > 0.01) {
         transfers.push({
           from: debtorId,
           to: creditorId,
@@ -116,34 +113,49 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen bg-background p-4 md:p-8">
-        <div className="mx-auto max-w-6xl space-y-8">
-          <h1 className="text-4xl font-bold text-center mb-8">Split Bills</h1>
-          
-          <div className="grid gap-8 md:grid-cols-2">
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center mb-12">
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 text-transparent bg-clip-text mb-4">
+              Split Bills
+            </h1>
+            <p className="text-gray-600 dark:text-gray-300 text-lg">
+              Split expenses with friends, hassle-free
+            </p>
+          </div>
+
+          <div className="grid gap-8 lg:grid-cols-2 max-w-7xl mx-auto">
             <div className="space-y-8">
-              <ParticipantManagement
-                onAddParticipant={addParticipant}
-                participants={participants}
-                onRemoveParticipant={removeParticipant}
-              />
-              
-              <ExpenseForm
-                onSubmit={addExpense}
-                participants={participants}
-              />
+              <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-lg rounded-2xl shadow-xl p-6 transition-all hover:shadow-2xl">
+                <ParticipantManagement
+                  onAddParticipant={addParticipant}
+                  participants={participants}
+                  onRemoveParticipant={removeParticipant}
+                />
+              </div>
+
+              <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-lg rounded-2xl shadow-xl p-6 transition-all hover:shadow-2xl">
+                <ExpenseForm
+                  onSubmit={addExpense}
+                  participants={participants}
+                />
+              </div>
             </div>
 
             <div className="space-y-8">
-              <BalanceSummary
-                balances={calculateBalances()}
-                getParticipantName={getParticipantName}
-              />
-              
-              <ExpenseHistory
-                expenses={expenses}
-                getParticipantName={getParticipantName}
-              />
+              <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-lg rounded-2xl shadow-xl p-6 transition-all hover:shadow-2xl">
+                <BalanceSummary
+                  balances={calculateBalances()}
+                  getParticipantName={getParticipantName}
+                />
+              </div>
+
+              <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-lg rounded-2xl shadow-xl p-6 transition-all hover:shadow-2xl">
+                <ExpenseHistory
+                  expenses={expenses}
+                  getParticipantName={getParticipantName}
+                />
+              </div>
             </div>
           </div>
         </div>

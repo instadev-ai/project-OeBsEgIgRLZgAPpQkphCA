@@ -45,45 +45,59 @@ const ParticipantManagement = ({
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader>
-        <CardTitle>Participants</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="participantName">Add Participant</Label>
-            <div className="flex space-x-2">
-              <Input
-                id="participantName"
-                placeholder="Enter name"
-                value={newParticipantName}
-                onChange={(e) => setNewParticipantName(e.target.value)}
-              />
-              <Button type="submit">Add</Button>
-            </div>
-          </div>
-        </form>
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">Participants</h2>
+        <p className="text-gray-500 dark:text-gray-400">Add friends to split bills with</p>
+      </div>
 
-        <div className="mt-4 space-y-2">
-          {participants.map((participant) => (
-            <div
-              key={participant.id}
-              className="flex items-center justify-between rounded-lg border p-2"
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="participantName" className="text-sm font-medium">
+            Add Participant
+          </Label>
+          <div className="flex space-x-2">
+            <Input
+              id="participantName"
+              placeholder="Enter name"
+              value={newParticipantName}
+              onChange={(e) => setNewParticipantName(e.target.value)}
+              className="flex-1 bg-white dark:bg-gray-900"
+            />
+            <Button 
+              type="submit"
+              className="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white"
             >
-              <span>{participant.name}</span>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => onRemoveParticipant(participant.id)}
-              >
-                Remove
-              </Button>
-            </div>
-          ))}
+              Add
+            </Button>
+          </div>
         </div>
-      </CardContent>
-    </Card>
+      </form>
+
+      <div className="space-y-3">
+        {participants.map((participant) => (
+          <div
+            key={participant.id}
+            className="flex items-center justify-between rounded-lg bg-white dark:bg-gray-900 p-4 shadow-sm transition-all hover:shadow-md"
+          >
+            <span className="font-medium text-gray-900 dark:text-white">{participant.name}</span>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onRemoveParticipant(participant.id)}
+              className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+            >
+              Remove
+            </Button>
+          </div>
+        ))}
+        {participants.length === 0 && (
+          <p className="text-center text-gray-500 dark:text-gray-400 py-4">
+            No participants yet. Add someone to get started!
+          </p>
+        )}
+      </div>
+    </div>
   )
 }
 
